@@ -1,24 +1,13 @@
-import cors from "cors"
 import express from "express"
-import { add } from "date-fns"
-import { prisma } from "./utils/prisma"
+const router = express.Router()
 
-const port = 8080
-const app = express()
+import { prisma } from "../utils/prisma"
+import { add } from "date-fns"
+import { generateLog } from "../utils/generate-log"
 
 const databaseRowId = "5e05f86a-03f4-459b-9af5-71a542ae36ad"
 
-app.use(cors())
-app.use(express.json())
-
-// ROTAS
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-
-app.get("/timer", async (request, reply) => {
+router.get("/timer", async (request, reply) => {
   const timerEndDate = await prisma.timer.findUnique({
     where: {
       id: databaseRowId
@@ -31,7 +20,7 @@ app.get("/timer", async (request, reply) => {
   })
 })
 
-app.post("/timer", async (request, reply) => {
+router.post("/timer", async (request, reply) => {
   const nowDate = new Date()
   const newEndDate = add(nowDate, {
     days: 7,
@@ -49,6 +38,8 @@ app.post("/timer", async (request, reply) => {
         }
       })
 
+      generateLog("Timer Update")
+
       reply.send({
         newEndDate
       })
@@ -58,10 +49,6 @@ app.post("/timer", async (request, reply) => {
       return reply.send(error)
     }
   }
-
-  return reply.send("?")
 })
 
-app.listen(port, () => {
-  console.log(`🚀 Server started at ${port}`)
-})
+export default router

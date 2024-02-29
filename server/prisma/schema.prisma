@@ -12,3 +12,9 @@ model Timer {
   endDate   DateTime
   updatedAt DateTime @default(now())
 }
+
+model Logs {
+  id       String   @id @default(uuid())
+  action   String
+  runnedAt DateTime @default(now())
+}

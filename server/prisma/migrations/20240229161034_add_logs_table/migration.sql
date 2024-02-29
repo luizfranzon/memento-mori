@@ -1,0 +1,6 @@
+-- CreateTable
+CREATE TABLE "Logs" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "action" TEXT NOT NULL,
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
